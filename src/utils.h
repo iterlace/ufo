@@ -5,8 +5,8 @@
 #define UFO_UTILS_H
 
 
-template<typename T,
-         typename = typename std::enable_if<std::is_arithmetic<T>::value, T>::type
-> T randomNumber(T lBorder, T rBorder);
+// TODO: generics
+double randomNumber(double lBorder, double rBorder);
+
 
 #endif //UFO_UTILS_H

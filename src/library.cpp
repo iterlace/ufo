@@ -2,15 +2,15 @@
 #include <algorithm>
 
 #include "include/library.h"
+#include "include/logger.h"
 #include "utils.h"
-#include "logger.h"
 
 using namespace std;
 
 
 Ingot::Ingot() {
-    this->width = randomNumber(10, 100);
     this->height = randomNumber(10, 100);
+    this->width = randomNumber(10, 100);
     this->depth = randomNumber(10, 500);
     this->density = randomNumber(19.3, 19.32);
 }
@@ -22,24 +22,81 @@ Ingot::Ingot(double height, double width, double depth, double density) {
     this->density = density;
 }
 
+
 void UFO::putIngot(Ingot ingot) {
     // TODO: log
-    this->currentIngot = ingot;
+    currentIngot = ingot;
 }
 
 void UFO::rotateIngot() {
     // TODO: log
-    swap(this->currentIngot.width, this->currentIngot.height);
+    swap(currentIngot.width, currentIngot.height);
 }
 
 void UFO::turnIngot() {
     // TODO: log
-    swap(this->currentIngot.width, this->currentIngot.depth);
+    swap(currentIngot.width, currentIngot.depth);
 }
 
 void UFO::spinIngot() {
     // TODO: log
-    swap(this->currentIngot.height, this->currentIngot.depth);
+    swap(currentIngot.height, currentIngot.depth);
+}
+
+double *UFO::calculateIngotPosition() {
+    Ingot &i = currentIngot;
+    double *slots = new double[3];
+    slots[0] = i.height;
+    slots[1] = i.width;
+    slots[2] = i.depth;
+
+    if (H != W) {
+        // indexes of the largest and the smallest sides of the UFO's ingot port
+        // 0 stands for height, 1 stands for width
+        int min_side_idx, max_side_idx;
+        // values of these sides
+        double min_side, max_side;
+        if (H < W) {
+            min_side_idx = 0;
+            min_side = H;
+            max_side_idx = 1;
+            max_side = W;
+        } else {
+            min_side_idx = 1;
+            min_side = W;
+            max_side_idx = 0;
+            max_side = H;
+        }
+
+        if (slots[min_side_idx] <= min_side) {
+
+        } else {
+            if (slots[2] <= min_side)
+                swap(slots[min_side_idx], slots[2]);
+            else
+            if (slots[max_side_idx] <= min_side)
+                swap(slots[min_side_idx], slots[max_side_idx]);
+            else {
+                dropIngot();
+                // TODO: exception
+                return nullptr;
+            }
+        }
+
+        if (slots[max_side_idx] <= max_side) {
+
+        } else {
+            if (slots[2] <= max_side) {
+                swap(slots[max_side_idx], slots[2]);
+            }
+            else {
+                dropIngot();
+                // TODO: exception
+                return nullptr;
+            }
+        }
+    }
+    return slots;
 }
 
 void UFO::verifyIngot() {
@@ -58,55 +115,26 @@ void UFO::verifyIngot() {
 //
 //    }
 
-    Ingot &i = this->currentIngot;
-
-    if (H != W) {
-        double slots[] = {i.height, i.width, i.depth};
-        // indexes of the largest and the smallest sides of the UFO's ingot port
-        // 0 stands for height, 1 stands for width
-        int min_side_idx, max_side_idx;
-        // values of these sides
-        double min_side, max_side;
-        if (H < M) {
-            min_side_idx = 0;
-            min_side = H;
-            max_side_idx = 1;
-            max_side = W;
-        } else {
-            min_side_idx = 1;
-            min_side = W;
-            max_side_idx = 0;
-            max_side = H;
-        }
-
-        if (slots[min_side_idx] <= min_side) {
-
-        } else {
-            if (slots[2] <= min_side)
-                swap(slots[min_side_idx], slots[2]);
-            else
-                if (slots[max_side_idx] <= min_side)
-                    swap(slots[min_side_idx], slots[max_side_idx]);
-                else {
-                    this->dropIngot();
-                    return;
-                }
-        }
-
-        if (slots[max_side_idx] < max_side) {
-
-        } else {
-            if (slots[2] <= max_side) {
-                swap(slots[max_side_idx], slots[2]);
-            }
-            else {
-                this->dropIngot();
-                return;
-            }
-        }
-    }
 
 }
 
 
+void UFO::cutIngot() {
+
+}
+
+
+void UFO::dropIngot() {
+
+}
+
+
+void UFO::acceptIngot() {
+
+}
+
+
+void UFO::flyAway() {
+
+}
 

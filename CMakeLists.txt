@@ -4,13 +4,13 @@ include(GNUInstallDirs)
 
 set(CMAKE_CXX_STANDARD 14)
 
-set(SOURCE_FILES src/library.cpp
-        include/library.h src/logger.cpp src/logger.h src/utils.cpp src/utils.h )
-set(PUBLIC_HEADERS include/library.h)
+set(SOURCE_FILES include/library.h src/utils.h src/library.cpp
+        src/logger.cpp include/logger.h src/utils.cpp)
+set(PUBLIC_HEADERS include/library.h src/utils.h)
 add_library(ufo ${SOURCE_FILES})
-add_subdirectory(tests)
 set_target_properties(ufo PROPERTIES VERSION "${PROJECT_VERSION}" PUBLIC_HEADER "${PUBLIC_HEADERS}")
-target_include_directories(ufo PRIVATE .)
+target_include_directories(ufo PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})  # TODO: PRIVATE
+add_subdirectory(tests)
 
 set(CMAKE_SHARED_LINKER_FLAGS "-Wall")
 

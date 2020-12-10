@@ -1,25 +1,25 @@
-#ifndef H
-#define H 40
+#ifndef _H
+#define _H 40
 #endif
 
-#ifndef W
-#define W 100
+#ifndef _W
+#define _W 100
 #endif
 
-#ifndef V
-#define V 10000
+#ifndef _V
+#define _V 10000
 #endif
 
-#ifndef M
-#define M 10000
+#ifndef _M
+#define _M 10000
 #endif
 
-#ifndef E0
-#define E0 100000
+#ifndef _E0
+#define _E0 100000
 #endif
 
-#ifndef EF
-#define EF 100
+#ifndef _EF
+#define _EF 100
 #endif
 
 #ifndef UFO_LIBRARY_H
@@ -37,7 +37,9 @@ public:
 
 class UFO {
 public:
-    unsigned long long E;
+    unsigned long long E = _E0;
+    double H = _H;  // Opening height
+    double W = _W;  // Opening width
     Ingot currentIngot;
 
     void putIngot(Ingot ingot);
@@ -46,6 +48,7 @@ private:
     void rotateIngot();
     void turnIngot();
     void spinIngot();
+    double * calculateIngotPosition();
     void verifyIngot();
     void cutIngot();
     void acceptIngot();

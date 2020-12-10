@@ -1,9 +1,11 @@
 #include <type_traits>
 #include <random>
 
+#include "utils.h"
 
-template<typename T>
-T randomNumber(T lBorder, T rBorder) {
-    T number = (T)rand() / RAND_MAX;
+
+double randomNumber(double lBorder, double rBorder) {
+//    static_assert(std::is_arithmetic<T>::value, "Non-numeric type is provided!");
+    double number = (double)rand() / RAND_MAX;
     return lBorder + number * (rBorder - lBorder);
 }
