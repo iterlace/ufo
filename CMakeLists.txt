@@ -4,7 +4,7 @@ include(GNUInstallDirs)
 
 set(CMAKE_CXX_STANDARD 14)
 
-set(SOURCE_FILES src/library.cpp src/library_test.cpp
+set(SOURCE_FILES src/library.cpp
         include/library.h src/logger.cpp src/logger.h src/utils.cpp src/utils.h )
 set(PUBLIC_HEADERS include/library.h)
 add_library(ufo ${SOURCE_FILES})

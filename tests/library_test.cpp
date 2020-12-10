@@ -1,7 +1,10 @@
 #include <gtest/gtest.h>
 
+#include "../include/library.h"
+
+
 TEST(SquareRootTest, PositiveNos) {
-    EXPECT_EQ (18.0, (12+6,0));
+    EXPECT_EQ (18.0, (12+6.0));
 }
 
 int main(int argc, char **argv) {

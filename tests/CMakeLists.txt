@@ -1,9 +1,9 @@
 #include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR})
 project(tests)
-add_subdirectory(lib)
+add_subdirectory(lib/googletest)
 
-add_executable(runTests library_test.cpp)
+set(gtest_SOURCE_DIR lib/googletest/googletest)
 include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR})
 
-add_executable(tests_run test1.cpp tests2.cpp)
+add_executable(tests_run library_test.cpp)
 target_link_libraries(tests_run gtest gtest_main)
