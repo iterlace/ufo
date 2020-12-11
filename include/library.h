@@ -32,6 +32,8 @@ public:
 
     Ingot();
     Ingot(double height, double width, double depth, double density);
+
+    // TODO: string representation
 };
 
 
@@ -48,8 +50,8 @@ private:
     void rotateIngot();
     void turnIngot();
     void spinIngot();
-    double * calculateIngotPosition();
-    void verifyIngot();
+    bool calculateIngotPosition(double *slots, std::vector<char> *commands);
+    bool verifyIngot();
     void cutIngot();
     void acceptIngot();
     void dropIngot();
