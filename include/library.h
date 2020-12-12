@@ -29,6 +29,9 @@
 #define UFO_LIBRARY_H
 
 
+#include "src/constants.h"
+
+
 class Ingot {
 public:
     // height, width, depth - linear dimensions of ingot (cm)
@@ -37,6 +40,8 @@ public:
     Ingot();
     Ingot(double height, double width, double depth, double density);
     std::string to_string();
+
+    double getWeight();
 
     // TODO: string representation
 };
@@ -55,13 +60,14 @@ private:
     void rotateIngot();
     void turnIngot();
     void spinIngot();
-    bool calculateIngotPosition(double *slots, std::vector<char> *commands);
-    bool isIngotValid();
-    double calculateEnergyCosts();
-    double calculateDepth(double energyCost);
-    void cutIngot();
+    bool isIngotValid(Ingot *i);
+    void cutIngot(double newDepth);
     void acceptIngot();
     void dropIngot();
+
+    bool calculateIngotPosition(Ingot *i, double *slots, std::vector<COMMAND> *commands) const;
+    static double calculateEnergyCosts(Ingot *i);
+    static double calculateDepth(Ingot *i, double energyLimit);
 };
 
 #endif //UFO_LIBRARY_H
