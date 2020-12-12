@@ -47,7 +47,7 @@ public:
     double E = _E0;
     double H = _H;  // Opening height
     double W = _W;  // Opening width
-    Ingot currentIngot;
+    std::deque<Ingot> ingots;
 
     void putIngot(Ingot ingot);
     void flyAway();

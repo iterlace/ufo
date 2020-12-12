@@ -34,37 +34,37 @@ TEST(UfoTest, PutIngotTest) {
     ufo.H = 10;
     ufo.W = 10;
     ufo.putIngot(ingot);
-    EXPECT_EQ(ufo.currentIngot.height, ingot.height);
-    EXPECT_EQ(ufo.currentIngot.width, ingot.width);
-    EXPECT_EQ(ufo.currentIngot.depth, ingot.depth);
-    EXPECT_EQ(ufo.currentIngot.density, ingot.density);
+    EXPECT_EQ(ufo.ingots.front().height, ingot.height);
+    EXPECT_EQ(ufo.ingots.front().width, ingot.width);
+    EXPECT_EQ(ufo.ingots.front().depth, ingot.depth);
+    EXPECT_EQ(ufo.ingots.front().density, ingot.density);
 }
 
 
 TEST(UfoTest, RotateIngotTest) {
     UFO ufo = UFO();
-    ufo.currentIngot = Ingot(1, 2, 3, 0);
+    ufo.ingots.emplace_back(Ingot(1, 2, 3, 0));
     ufo.rotateIngot();
-    EXPECT_EQ(ufo.currentIngot.height, 2);
-    EXPECT_EQ(ufo.currentIngot.width, 1);
+    EXPECT_EQ(ufo.ingots.front().height, 2);
+    EXPECT_EQ(ufo.ingots.front().width, 1);
 }
 
 
 TEST(UfoTest, TurnIngotTest) {
     UFO ufo = UFO();
-    ufo.currentIngot = Ingot(1, 2, 3, 0);
+    ufo.ingots.emplace_back(Ingot(1, 2, 3, 0));
     ufo.turnIngot();
-    EXPECT_EQ(ufo.currentIngot.width, 3);
-    EXPECT_EQ(ufo.currentIngot.depth, 2);
+    EXPECT_EQ(ufo.ingots.front().width, 3);
+    EXPECT_EQ(ufo.ingots.front().depth, 2);
 }
 
 
 TEST(UfoTest, SpinIngotTest) {
     UFO ufo = UFO();
-    ufo.currentIngot = Ingot(1, 2, 3, 0);
+    ufo.ingots.emplace_back(1, 2, 3, 0);
     ufo.spinIngot();
-    EXPECT_EQ(ufo.currentIngot.height, 3);
-    EXPECT_EQ(ufo.currentIngot.depth, 1);
+    EXPECT_EQ(ufo.ingots.front().height, 3);
+    EXPECT_EQ(ufo.ingots.front().depth, 1);
 }
 
 
@@ -79,7 +79,7 @@ TEST(UfoTest, CalculateIngotPositionTest) {
     // CASE 1 - initially correct values (rectangular opening)
     ufo.H = 20;
     ufo.W = 50;
-    ufo.currentIngot = Ingot(20, 50, 40, 0);
+    ufo.ingots.emplace_back(Ingot(20, 50, 40, 0));
     success = ufo.calculateIngotPosition(&slots[0], &commands);
     h = slots[0], w = slots[1], d = slots[2];
     EXPECT_TRUE(success);
@@ -88,11 +88,12 @@ TEST(UfoTest, CalculateIngotPositionTest) {
     EXPECT_EQ(d, 40);
     EXPECT_EQ(commands, vector<char>({}));
     commands.clear();
+    ufo.ingots.clear();
 
     // CASE 2 - rotation (rectangular opening)
     ufo.H = 50;
     ufo.W = 20;
-    ufo.currentIngot = Ingot(20, 50, 40, 0);
+    ufo.ingots.emplace_back(Ingot(20, 50, 40, 0));
     success = ufo.calculateIngotPosition(&slots[0], &commands);
     h = slots[0], w = slots[1], d = slots[2];
     EXPECT_TRUE(success);
@@ -101,11 +102,12 @@ TEST(UfoTest, CalculateIngotPositionTest) {
     EXPECT_EQ(d, 40);
     EXPECT_EQ(commands, vector<char>({'R'}));
     commands.clear();
+    ufo.ingots.clear();
 
     // CASE 3 - spin (rectangular opening)
     ufo.H = 20;
     ufo.W = 50;
-    ufo.currentIngot = Ingot(30, 50, 20, 0);
+    ufo.ingots.emplace_back(Ingot(30, 50, 20, 0));
     success = ufo.calculateIngotPosition(&slots[0], &commands);
     h = slots[0], w = slots[1], d = slots[2];
     EXPECT_TRUE(success);
@@ -114,11 +116,12 @@ TEST(UfoTest, CalculateIngotPositionTest) {
     EXPECT_EQ(d, 30);
     EXPECT_EQ(commands, vector<char>({'S'}));
     commands.clear();
+    ufo.ingots.clear();
 
     // CASE 4 - turn (rectangular opening)
     ufo.H = 20;
     ufo.W = 30;
-    ufo.currentIngot = Ingot(20, 50, 30, 0);
+    ufo.ingots.emplace_back(Ingot(20, 50, 30, 0));
     success = ufo.calculateIngotPosition(&slots[0], &commands);
     ASSERT_TRUE(success);
     h = slots[0], w = slots[1], d = slots[2];
@@ -127,11 +130,12 @@ TEST(UfoTest, CalculateIngotPositionTest) {
     EXPECT_EQ(d, 50);
     EXPECT_EQ(commands, vector<char>({'T'}));
     commands.clear();
+    ufo.ingots.clear();
 
     // CASE 5 - rotation+spin (rectangular opening)
     ufo.H = 20;
     ufo.W = 30;
-    ufo.currentIngot = Ingot(50, 20, 30, 0);
+    ufo.ingots.emplace_back(Ingot(50, 20, 30, 0));
     success = ufo.calculateIngotPosition(&slots[0], &commands);
     h = slots[0], w = slots[1], d = slots[2];
     EXPECT_TRUE(success);
@@ -140,13 +144,14 @@ TEST(UfoTest, CalculateIngotPositionTest) {
     EXPECT_EQ(d, 50);
     EXPECT_EQ(commands, vector<char>({'R', 'T'}));
     commands.clear();
+    ufo.ingots.clear();
 
     // TODO: create more complex test cases
 
     // CASE 6 - spin (square opening)
     ufo.H = 20;
     ufo.W = 20;
-    ufo.currentIngot = Ingot(30, 15, 20, 0);
+    ufo.ingots.emplace_back(Ingot(30, 15, 20, 0));
     success = ufo.calculateIngotPosition(&slots[0], &commands);
     h = slots[0], w = slots[1], d = slots[2];
     EXPECT_TRUE(success);
@@ -155,11 +160,12 @@ TEST(UfoTest, CalculateIngotPositionTest) {
     EXPECT_EQ(d, 30);
     EXPECT_EQ(commands, vector<char>({'S'}));
     commands.clear();
+    ufo.ingots.clear();
 
     // CASE 7 - turn (square opening)
     ufo.H = 20;
     ufo.W = 20;
-    ufo.currentIngot = Ingot(15, 30, 20, 0);
+    ufo.ingots.emplace_back(Ingot(15, 30, 20, 0));
     success = ufo.calculateIngotPosition(&slots[0], &commands);
     h = slots[0], w = slots[1], d = slots[2];
     EXPECT_TRUE(success);
@@ -168,6 +174,7 @@ TEST(UfoTest, CalculateIngotPositionTest) {
     EXPECT_EQ(d, 30);
     EXPECT_EQ(commands, vector<char>({'T'}));
     commands.clear();
+    ufo.ingots.clear();
 }
 
 
@@ -175,19 +182,19 @@ TEST(UfoTest, IsIngotValidTest) {
     UFO ufo = UFO();
     ufo.H = 20;
     ufo.W = 30;
-    ufo.currentIngot = Ingot(50, 20, 30, 19.32);
+    ufo.ingots.emplace_back(Ingot(50, 20, 30, 19.32));
 
     bool valid = ufo.isIngotValid();
     ASSERT_TRUE(valid);
-    EXPECT_EQ(ufo.currentIngot.height, 20);
-    EXPECT_EQ(ufo.currentIngot.width, 30);
-    EXPECT_EQ(ufo.currentIngot.depth, 50);
+    EXPECT_EQ(ufo.ingots.front().height, 20);
+    EXPECT_EQ(ufo.ingots.front().width, 30);
+    EXPECT_EQ(ufo.ingots.front().depth, 50);
 }
 
 
 TEST(UfoTest, CalculateEnergyCostTest) {
     UFO ufo = UFO();
-    ufo.currentIngot = Ingot(20, 20, 1, 19.32);
+    ufo.ingots.emplace_back(Ingot(20, 20, 1, 19.32));
     double costs = ufo.calculateEnergyCosts();
     ASSERT_EQ(costs, 3.44490488643199999074795414344407618045806884765625);
 }
@@ -195,7 +202,7 @@ TEST(UfoTest, CalculateEnergyCostTest) {
 
 TEST(UfoTest, CalculateDepthTest) {
     UFO ufo = UFO();
-    ufo.currentIngot = Ingot(20, 20, 1, 19.32);
+    ufo.ingots.emplace_back(Ingot(20, 20, 1, 19.32));
     double depth = ufo.calculateDepth(1.44490488643199999074795414344407618045806884765625);
     ASSERT_LE(depth, 1.00001);
     ASSERT_GE(depth, 0.99999);

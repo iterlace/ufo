@@ -32,13 +32,16 @@ string Ingot::to_string() {
 void UFO::putIngot(Ingot ingot) {
     // TODO: log
     fprintf(stderr, "Got new ingot: %s\n", ingot.to_string().c_str());
-    currentIngot = ingot;
+    ingots.emplace_back(ingot);
     if (isIngotValid()) {
-        Ingot *i = &this->currentIngot;
+        Ingot *i = &this->ingots.front();
         if (E-calculateEnergyCosts() > _EF)
             acceptIngot(); // TODO: move accept/drop to the 'put' method
         else {
-
+//            TODO: E-_EF-2-5
+//            while() {
+//
+//            }
         }
     } else {
         dropIngot();
@@ -50,25 +53,25 @@ void UFO::rotateIngot() {
     // TODO: log
     fprintf(stderr, "Rotate\n");
     E -= 10;
-    swap(currentIngot.width, currentIngot.height);
+    swap(ingots.front().width, ingots.front().height);
 }
 
 void UFO::turnIngot() {
     // TODO: log
     fprintf(stderr, "Turn\n");
     E -= 10;
-    swap(currentIngot.width, currentIngot.depth);
+    swap(ingots.front().width, ingots.front().depth);
 }
 
 void UFO::spinIngot() {
     // TODO: log
     fprintf(stderr, "Spin\n");
     E -= 10;
-    swap(currentIngot.height, currentIngot.depth);
+    swap(ingots.front().height, ingots.front().depth);
 }
 
 bool UFO::calculateIngotPosition(double *slots, std::vector<char> *commands) {
-    Ingot &i = currentIngot;
+    Ingot &i = ingots.front();
     slots[0] = i.height;
     slots[1] = i.width;
     slots[2] = i.depth;
@@ -156,7 +159,7 @@ double UFO::calculateEnergyCosts() {
     // m  - weight of the ingot
     // efficiency - efficiency of the recuperator
     // total - calculation result
-    Ingot *i = &currentIngot;
+    Ingot *i = &ingots.front();
 
     double t0, tm, tr, c, l, m, efficiency, total;
     t0 = 300;
@@ -173,7 +176,7 @@ double UFO::calculateEnergyCosts() {
 }
 
 double UFO::calculateDepth(double energyCost) {
-    Ingot *i = &currentIngot;
+    Ingot *i = &ingots.front();
 
     double t0, tm, tr, c, l, h, w, d, density, efficiency;
     t0 = 300;
