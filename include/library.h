@@ -1,3 +1,6 @@
+#include <string>
+#include <deque>
+
 #ifndef _H
 #define _H 40
 #endif
@@ -15,7 +18,7 @@
 #endif
 
 #ifndef _E0
-#define _E0 100000
+#define _E0 10000
 #endif
 
 #ifndef _EF
@@ -28,10 +31,12 @@
 
 class Ingot {
 public:
+    // height, width, depth - linear dimensions of ingot (cm)
     double height, width, depth, density;
 
     Ingot();
     Ingot(double height, double width, double depth, double density);
+    std::string to_string();
 
     // TODO: string representation
 };
@@ -39,7 +44,7 @@ public:
 
 class UFO {
 public:
-    unsigned long long E = _E0;
+    double E = _E0;
     double H = _H;  // Opening height
     double W = _W;  // Opening width
     Ingot currentIngot;
@@ -51,11 +56,13 @@ private:
     void turnIngot();
     void spinIngot();
     bool calculateIngotPosition(double *slots, std::vector<char> *commands);
-    bool verifyIngot();
+    bool isIngotValid();
+    double calculateEnergyCosts();
+    double calculateDepth(double energyCost);
     void cutIngot();
     void acceptIngot();
     void dropIngot();
 };
 
-#endif //UNTITLED_LIBRARY_H
+#endif //UFO_LIBRARY_H
 

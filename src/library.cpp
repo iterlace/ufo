@@ -1,6 +1,7 @@
 #include <iostream>
 #include <algorithm>
 #include <vector>
+#include <string>
 
 #include "include/library.h"
 #include "include/logger.h"
@@ -23,11 +24,26 @@ Ingot::Ingot(double height, double width, double depth, double density) {
     this->density = density;
 }
 
+string Ingot::to_string() {
+    return format("<Ingot(height=%.02f, width=%.02f, depth=%.02f, density=%.02f)>", height, width, depth, density);
+}
+
 
 void UFO::putIngot(Ingot ingot) {
     // TODO: log
-    fprintf(stderr, "Got new ingot: H=%.02f, W=%.02f, D=%.02f\n", ingot.height, ingot.width, ingot.depth);
+    fprintf(stderr, "Got new ingot: %s\n", ingot.to_string().c_str());
     currentIngot = ingot;
+    if (isIngotValid()) {
+        Ingot *i = &this->currentIngot;
+        if (E-calculateEnergyCosts() > _EF)
+            acceptIngot(); // TODO: move accept/drop to the 'put' method
+        else {
+
+        }
+    } else {
+        dropIngot();
+    }
+
 }
 
 void UFO::rotateIngot() {
@@ -103,10 +119,10 @@ bool UFO::calculateIngotPosition(double *slots, std::vector<char> *commands) {
     return true;
 }
 
-bool UFO::verifyIngot() {
-    bool success;
-    double *slots = new double[3];
-    std::vector<char> commands;
+bool UFO::isIngotValid() {
+    bool success; // is ingot valid
+    double *slots = new double[3];  // h, w, d of the ingot
+    std::vector<char> commands;  // commands register
 
     success = calculateIngotPosition(&slots[0], &commands);
     if (!success) {
@@ -128,28 +144,72 @@ bool UFO::verifyIngot() {
         }
         commands.erase(commands.begin());
     }
-    acceptIngot();
     return true;
+}
+
+double UFO::calculateEnergyCosts() {
+    // t0 - initial temperature of golden ingot
+    // tm - heating temperature
+    // tr - cooling by recuperator temperature
+    // c  - specific heat of gold
+    // l  - specific heat of fusion of gold
+    // m  - weight of the ingot
+    // efficiency - efficiency of the recuperator
+    // total - calculation result
+    Ingot *i = &currentIngot;
+
+    double t0, tm, tr, c, l, m, efficiency, total;
+    t0 = 300;
+    tm = 1337.58;
+    tr = 4;
+    c = 0.129;
+    l = 67;
+    m = i->height/100 * i->width/100 * i->depth/100 * i->density;
+    efficiency = 0.7;
+
+    total = -m*(l-(efficiency-1)+c*(t0+tr*efficiency-tm*(efficiency+1)));
+    total += 2;  // accept cost
+    return total;
+}
+
+double UFO::calculateDepth(double energyCost) {
+    Ingot *i = &currentIngot;
+
+    double t0, tm, tr, c, l, h, w, d, density, efficiency;
+    t0 = 300;
+    tm = 1337.58;
+    tr = 4;
+    c = 0.129;
+    l = 67;
+    efficiency = 0.7;
+    h = i->height/100;
+    w = i->width/100;
+    density = i->density;
+
+    d = -(100*energyCost)/((h*w*density)*(l-(efficiency-1)+c*(t0+tr*efficiency-tm*(efficiency+1))));
+    if (d > i->depth)
+        d = i->depth;
+    return d;
 }
 
 
 void UFO::cutIngot() {
-    E -= 20;
+    E -= 5;
     fprintf(stderr, "Ingot cut\n");
 
 }
 
 
 void UFO::dropIngot() {
-    E -= 5;
+    E -= 2;
     fprintf(stderr, "Ingot dropped\n");
     // TODO: delete it somehow
 }
 
 
 void UFO::acceptIngot() {
-    E -= 5;
-    fprintf(stderr, "Ingot accepted\n");
+    E -= calculateEnergyCosts();
+    fprintf(stderr, "Ingot accepted. Energy left: %.0f\n", E);
 }
 
 
