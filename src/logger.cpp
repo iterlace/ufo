@@ -4,21 +4,35 @@
 #include <string>
 
 #include "include/logger.h"
+//#include "utils.h"
 
 using namespace std;
 
-Logger::Logger(string &filename) {
-    this->logFile.open(filename);
-}
 
-Logger::~Logger() {
-    this->logFile.close();
-}
+//Logger::Logger() {
+//
+//}
+//
+//Logger::Logger(string &filename) {
+//    this->logFile->open(filename);
+//}
+//
+//Logger::~Logger() {
+//    if (this->logFile != nullptr)
+//        this->logFile->close();
+//}
 
-void Logger::log(string &message) {
+void Logger::log(const std::string& message) {
     if (message.length() == 0)
         return;
 
     cerr << message + '\n';
-    this->logFile << message + '\n';
+
+//    if (this->logFile->good())
+//        *this->logFile << message + '\n';
 }
+
+//template<typename ... Args>
+//void Logger::log(const std::string& message, Args ... args) {
+//    return log(format(message, args...));
+//}

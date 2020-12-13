@@ -30,6 +30,7 @@
 
 
 #include "src/constants.h"
+#include "logger.h"
 
 
 class Ingot {
@@ -39,7 +40,7 @@ public:
 
     Ingot();
     Ingot(double height, double width, double depth, double density);
-    std::string to_string();
+    string to_string();
 
     double getWeight();
 
@@ -53,6 +54,8 @@ public:
     double H = _H;  // Opening height
     double W = _W;  // Opening width
     std::deque<Ingot> ingots;
+    Logger CR = Logger();
+    Logger SR = Logger();
 
     void putIngot(Ingot ingot);
     void flyAway();

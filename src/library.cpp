@@ -36,8 +36,8 @@ double Ingot::getWeight() {
 
 
 void UFO::putIngot(Ingot ingot) {
-    // TODO: log
-    fprintf(stderr, "Got new ingot: %s\n", ingot.to_string().c_str());
+    CR.log("P");
+    SR.log("Got new ingot: %s\n", ingot.to_string().c_str());
     ingots.emplace_back(ingot);
     if (isIngotValid(&ingots.front())) {
         if (E-calculateEnergyCosts(&ingots.front())-ACCEPT_COST >= _EF)
@@ -59,23 +59,23 @@ void UFO::putIngot(Ingot ingot) {
 }
 
 void UFO::rotateIngot() {
-    // TODO: log
-    fprintf(stderr, "Rotate\n");
+    CR.log("R");
     E -= ROTATE_COST;
+    SR.log("Ingot %s was rotated", ingots.front().to_string().c_str());
     swap(ingots.front().width, ingots.front().height);
 }
 
 void UFO::turnIngot() {
-    // TODO: log
-    fprintf(stderr, "Turn\n");
+    CR.log("T");
     E -= TURN_COST;
+    SR.log("Ingot %s was turned", ingots.front().to_string().c_str());
     swap(ingots.front().width, ingots.front().depth);
 }
 
 void UFO::spinIngot() {
-    // TODO: log
-    fprintf(stderr, "Spin\n");
+    CR.log("S");
     E -= SPIN_COST;
+    SR.log("Ingot %s was spinned", ingots.front().to_string().c_str());
     swap(ingots.front().height, ingots.front().depth);
 }
 
@@ -175,34 +175,37 @@ double UFO::calculateDepth(Ingot *i, double energyLimit) {
 
 
 void UFO::cutIngot(double newDepth) {
+    CR.log("C");
     Ingot *i = &ingots.front();
     E -= 5;
     ingots.emplace(ingots.begin()+1, Ingot(i->height, i->width, i->depth-newDepth, i->density));
     i->depth = newDepth;
 
-    fprintf(stderr, "Ingot cut to %.2f cm\n", i->depth);
+    SR.log("Ingot %s cut to %.2f cm\n", ingots.front().to_string().c_str(), i->depth);
 }
 
 
 void UFO::dropIngot() {
+    CR.log("D");
     E -= DROP_COST;
-    fprintf(stderr, "Ingot dropped\n");
-    // TODO: delete it somehow
+    SR.log("Ingot %s dropped", ingots.front().to_string().c_str());
+    ingots.pop_front();
 }
 
 
 void UFO::acceptIngot() {
+    CR.log("A");
     Ingot *i = &ingots.front();
     E -= calculateEnergyCosts(i);
     E -= 2;
     E += F_EFFICIENCY*(F_L*i->getWeight()+(F_C*i->getWeight()*(F_TM-F_TR)));
+    SR.log("Ingot %s accepted. Energy left: %.0f\n", ingots.front().to_string().c_str(), E);
     ingots.pop_front();
 
-    fprintf(stderr, "Ingot accepted. Energy left: %.0f\n", E);
 }
 
 
 void UFO::flyAway() {
-    fprintf(stderr, "yankee go home\n");
+    SR.log("Yankee go home!\n");
 }
 

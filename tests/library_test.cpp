@@ -16,6 +16,9 @@ TEST(IngotTest, BasicConstructorTest) {
     EXPECT_EQ(ingot.width, 20);
     EXPECT_EQ(ingot.depth, 30);
     EXPECT_EQ(ingot.density, 19.3);
+
+    Ingot *i = &ingot;
+    ASSERT_EQ((*i).height, i->height);
 }
 
 
