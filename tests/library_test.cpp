@@ -183,13 +183,13 @@ TEST(UfoTest, CalculateIngotDimensionsTest) {
 }
 
 
-TEST(UfoTest, IsIngotValidTest) {
+TEST(UfoTest, PlaceIngotCorrectlyTest) {
     UFO ufo = UFO();
     ufo.H = 20;
     ufo.W = 30;
     ufo.ingots.emplace_back(Ingot(50, 20, 30, 19.32));
 
-    bool valid = ufo.isIngotValid(&ufo.ingots.front());
+    bool valid = ufo.placeIngotCorrectly(&ufo.ingots.front());
     ASSERT_TRUE(valid);
     EXPECT_EQ(ufo.ingots.front().height, 20);
     EXPECT_EQ(ufo.ingots.front().width, 30);

@@ -39,7 +39,7 @@ void UFO::putIngot(Ingot ingot) {
     CR.log("P");
     SR.log("Got new ingot: %s. Energy left: %.0f", ingot.to_string().c_str(), E);
     ingots.emplace_back(ingot);
-    if (isIngotValid(&ingots.front())) {
+    if (placeIngotCorrectly(&ingots.front())) {
         if (E-calculateEnergyCosts(&ingots.front())-ACCEPT_COST >= _EF)
             acceptIngot();
         else {
@@ -131,7 +131,7 @@ bool UFO::calculateIngotDimensions(Ingot *i, double *slots, std::vector<COMMAND>
     return true;
 }
 
-bool UFO::isIngotValid(Ingot *i) {
+bool UFO::placeIngotCorrectly(Ingot *i) {
     bool success; // is ingot valid
     double *slots = new double[3];  // h, w, d of the ingot
     std::vector<COMMAND> commands;  // commands register

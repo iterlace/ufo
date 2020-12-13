@@ -105,12 +105,12 @@ private:
      * Verifies given ingot's sizes to pass through the opening.
      * Rotates/turns/spins the ingot if needed.
      * In case of absolute unsuitability of the ingot, returns false.
-     * Otherwise true.
+     * Otherwise  - true.
      *
      * @param[in] i Ingot to be processed
      * @return true if ingot is prepared and can be passed through the opening. Otherwise false
      */
-    bool isIngotValid(Ingot *i);
+    bool placeIngotCorrectly(Ingot *i);
 
     /**
      * Cuts the first ingot in the queue to the given size.
