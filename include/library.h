@@ -1,5 +1,6 @@
 #include <string>
 #include <deque>
+#include <vector>
 
 #ifndef _H
 #define _H 40
