@@ -14,10 +14,10 @@ using namespace std;
 // Ingot
 
 Ingot::Ingot() {
-    this->height = randomNumber(10, 100);
-    this->width = randomNumber(10, 100);
-    this->depth = randomNumber(10, 500);
-    this->density = randomNumber(19.3, 19.32);
+    this->height = randomNumber(0.10, 1);
+    this->width = randomNumber(0.10, 1);
+    this->depth = randomNumber(0.10, 5);
+    this->density = randomNumber(19300, 19320);
 }
 
 Ingot::Ingot(double height, double width, double depth, double density) {
@@ -32,12 +32,12 @@ string Ingot::to_string() {
 }
 
 double Ingot::getWeight() {
-    return height/100 * width/100 * depth/100 * density;
+    return height * width * depth * density;
 }
 
 
 double Ingot::getVolume() {
-    return height/100 * width/100 * depth/100;
+    return height * width * depth;
 }
 
 
@@ -189,11 +189,11 @@ double UFO::calculateDepth(Ingot *i, double energyLimit, double capacity) {
     if (capacity <= 0)
         return 0;
 
-    double h = i->height/100;
-    double w = i->width/100;
+    double h = i->height;
+    double w = i->width;
     double density = i->density;
 
-    double dByEnergy = 100*energyLimit/((h*w*density)*(F_L+(F_C*(F_TM-F_T0))));
+    double dByEnergy = energyLimit/((h*w*density)*(F_L+(F_C*(F_TM-F_T0))));
     double dByCap = capacity/(h*w);
     double d = min(dByEnergy, dByCap);
 

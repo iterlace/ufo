@@ -13,11 +13,11 @@
 using namespace std;
 
 TEST(IngotTest, BasicConstructorTest) {
-    Ingot ingot = Ingot(10, 20, 30, 19.3);
+    Ingot ingot = Ingot(10, 20, 30, 19300);
     EXPECT_EQ(ingot.height, 10);
     EXPECT_EQ(ingot.width, 20);
     EXPECT_EQ(ingot.depth, 30);
-    EXPECT_EQ(ingot.density, 19.3);
+    EXPECT_EQ(ingot.density, 19300);
 
     Ingot *i = &ingot;
     ASSERT_EQ((*i).height, i->height);
@@ -26,16 +26,16 @@ TEST(IngotTest, BasicConstructorTest) {
 
 TEST(IngotTest, AutoConstructorTest) {
     Ingot ingot = Ingot();
-    EXPECT_TRUE(ingot.height >= 10 && ingot.height <= 100);
-    EXPECT_TRUE(ingot.width >= 10 && ingot.width <= 100);
-    EXPECT_TRUE(ingot.depth >= 10 && ingot.depth <= 500);
-    EXPECT_TRUE(ingot.density >= 19.3 && ingot.density <= 19.32);
+    EXPECT_TRUE(ingot.height >= 0.1 && ingot.height <= 1);
+    EXPECT_TRUE(ingot.width >= 0.1 && ingot.width <= 1);
+    EXPECT_TRUE(ingot.depth >= 0.1 && ingot.depth <= 5);
+    EXPECT_TRUE(ingot.density >= 19300 && ingot.density <= 19320);
 }
 
 
 TEST(UfoTest, PutIngotTest) {
     std::fprintf(stderr, "======\n");
-    Ingot ingot = Ingot(10, 10, 10000000, 19.32);
+    Ingot ingot = Ingot(10, 10, 10000000, 19320);
     UFO ufo = UFO();
     ufo.H = 10;
     ufo.W = 10;
@@ -187,7 +187,7 @@ TEST(UfoTest, PlaceIngotCorrectlyTest) {
     UFO ufo = UFO();
     ufo.H = 20;
     ufo.W = 30;
-    ufo.ingots.emplace_back(Ingot(50, 20, 30, 19.32));
+    ufo.ingots.emplace_back(Ingot(50, 20, 30, 19320));
 
     bool valid = ufo.placeIngotCorrectly(&ufo.ingots.front());
     ASSERT_TRUE(valid);
@@ -199,9 +199,9 @@ TEST(UfoTest, PlaceIngotCorrectlyTest) {
 
 TEST(UfoTest, CalculateEnergyCostTest) {
     UFO ufo = UFO();
-    ufo.ingots.emplace_back(Ingot(20, 20, 1, 19.32));
+    ufo.ingots.emplace_back(Ingot(0.2, 0.2, 0.01, 19320));
     double costs = ufo.calculateEnergyCosts(&ufo.ingots.front());
-    ASSERT_EQ(costs, 1.55215195296000008085002264124341309070587158203125);
+    ASSERT_EQ(costs, 1552.151952960000244274851866066455841064453125);
 }
 
 
@@ -210,21 +210,21 @@ TEST(UfoTest, CalculateDepthTest) {
     double depth;
 
     // Calculate depth by energy limit  (values taken from CalculateEnergyCostTest)
-    ufo.ingots.emplace_back(Ingot(20, 20, 1, 19.32));
+    ufo.ingots.emplace_back(Ingot(0.2, 0.2, 0.01, 19320));
     depth = ufo.calculateDepth(
             &ufo.ingots.front(),
-            1.55215195296000008085002264124341309070587158203125,
+            1552.151952960000244274851866066455841064453125,
             1000000
     );
-    EXPECT_LE(depth, 1.00001);
-    EXPECT_GE(depth, 0.99999);
+    EXPECT_LE(depth, 0.0100001);
+    EXPECT_GE(depth, 0.0099999);
     ufo.ingots.clear();
 
     // Calculate depth by capacity
-    ufo.ingots.emplace_back(Ingot(1000, 1000,  1000, 19.32));
+    ufo.ingots.emplace_back(Ingot(10, 10,  10, 19320));
     depth = ufo.calculateDepth(
             &ufo.ingots.front(),
-            1000000,
+            10000000000,
             50
     );
     EXPECT_EQ(depth, 0.5);

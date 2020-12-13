@@ -41,7 +41,7 @@ const double F_L = 67;
 // Efficiency of the recuperator
 const double F_EFFICIENCY = 0.4;
 // Density of gold
-const double F_DENSITY = 19.32;
+const double F_DENSITY = 19320;
             
 
 
