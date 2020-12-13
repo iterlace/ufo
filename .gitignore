@@ -35,3 +35,5 @@ Makefile
 cmake_install.cmake
 /bin
 /lib
+/Win32
+CMakeCache.txt
