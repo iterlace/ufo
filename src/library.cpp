@@ -46,7 +46,8 @@ void UFO::putIngot(Ingot ingot) {
             double newDepth;
             // Energy, which will be used in the future
             const double energyToRemain = _EF + CUT_COST + ACCEPT_COST + DROP_COST;
-            while((newDepth = calculateDepth(&ingots.front(), E-energyToRemain)) > 0.001) {
+            while((newDepth = calculateDepth(&ingots.front(), E-energyToRemain, totalVolume-usedVolume)
+                    ) > 0.001 && totalVolume-usedVolume > 0) {
                 cutIngot(newDepth);
                 acceptIngot();
             }
@@ -79,7 +80,7 @@ void UFO::spinIngot() {
     swap(ingots.front().height, ingots.front().depth);
 }
 
-bool UFO::calculateIngotPosition(Ingot *i, double *slots, std::vector<COMMAND> *commands) const {
+bool UFO::calculateIngotDimensions(Ingot *i, double *slots, std::vector<COMMAND> *commands) const {
     slots[0] = i->height;
     slots[1] = i->width;
     slots[2] = i->depth;
@@ -135,7 +136,7 @@ bool UFO::isIngotValid(Ingot *i) {
     double *slots = new double[3];  // h, w, d of the ingot
     std::vector<COMMAND> commands;  // commands register
 
-    success = calculateIngotPosition(i, &slots[0], &commands);
+    success = calculateIngotDimensions(i, &slots[0], &commands);
     if (!success) {
         return false;
     }
@@ -161,12 +162,15 @@ double UFO::calculateEnergyCosts(Ingot *i) {
     return i->getWeight()*(F_L+(F_C*(F_TM-F_T0)));
 }
 
-double UFO::calculateDepth(Ingot *i, double energyLimit) {
+double UFO::calculateDepth(Ingot *i, double energyLimit, double capacity) {
     double h = i->height/100;
     double w = i->width/100;
     double density = i->density;
 
-    double d = 100*energyLimit/((h*w*density)*(F_L+(F_C*(F_TM-F_T0))));
+    double dByEnergy = 100*energyLimit/((h*w*density)*(F_L+(F_C*(F_TM-F_T0))));
+    double dByCap = capacity/(h*w);
+    double d = min(dByEnergy, dByCap);
+
     if (d > i->depth)
         d = i->depth;
     return d;

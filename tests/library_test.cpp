@@ -73,7 +73,7 @@ TEST(UfoTest, SpinIngotTest) {
 }
 
 
-TEST(UfoTest, CalculateIngotPositionTest) {
+TEST(UfoTest, CalculateIngotDimensionsTest) {
     UFO ufo = UFO();
     bool success;
     double *slots = new double[3];
@@ -85,7 +85,7 @@ TEST(UfoTest, CalculateIngotPositionTest) {
     ufo.H = 20;
     ufo.W = 50;
     ufo.ingots.emplace_back(Ingot(20, 50, 40, 0));
-    success = ufo.calculateIngotPosition(&ufo.ingots.front(), &slots[0], &commands);
+    success = ufo.calculateIngotDimensions(&ufo.ingots.front(), &slots[0], &commands);
     h = slots[0], w = slots[1], d = slots[2];
     EXPECT_TRUE(success);
     EXPECT_EQ(h, 20);
@@ -99,7 +99,7 @@ TEST(UfoTest, CalculateIngotPositionTest) {
     ufo.H = 50;
     ufo.W = 20;
     ufo.ingots.emplace_back(Ingot(20, 50, 40, 0));
-    success = ufo.calculateIngotPosition(&ufo.ingots.front(), &slots[0], &commands);
+    success = ufo.calculateIngotDimensions(&ufo.ingots.front(), &slots[0], &commands);
     h = slots[0], w = slots[1], d = slots[2];
     EXPECT_TRUE(success);
     EXPECT_EQ(h, 50);
@@ -113,7 +113,7 @@ TEST(UfoTest, CalculateIngotPositionTest) {
     ufo.H = 20;
     ufo.W = 50;
     ufo.ingots.emplace_back(Ingot(30, 50, 20, 0));
-    success = ufo.calculateIngotPosition(&ufo.ingots.front(), &slots[0], &commands);
+    success = ufo.calculateIngotDimensions(&ufo.ingots.front(), &slots[0], &commands);
     h = slots[0], w = slots[1], d = slots[2];
     EXPECT_TRUE(success);
     EXPECT_EQ(h, 20);
@@ -127,7 +127,7 @@ TEST(UfoTest, CalculateIngotPositionTest) {
     ufo.H = 20;
     ufo.W = 30;
     ufo.ingots.emplace_back(Ingot(20, 50, 30, 0));
-    success = ufo.calculateIngotPosition(&ufo.ingots.front(), &slots[0], &commands);
+    success = ufo.calculateIngotDimensions(&ufo.ingots.front(), &slots[0], &commands);
     ASSERT_TRUE(success);
     h = slots[0], w = slots[1], d = slots[2];
     EXPECT_EQ(h, 20);
@@ -141,7 +141,7 @@ TEST(UfoTest, CalculateIngotPositionTest) {
     ufo.H = 20;
     ufo.W = 30;
     ufo.ingots.emplace_back(Ingot(50, 20, 30, 0));
-    success = ufo.calculateIngotPosition(&ufo.ingots.front(), &slots[0], &commands);
+    success = ufo.calculateIngotDimensions(&ufo.ingots.front(), &slots[0], &commands);
     h = slots[0], w = slots[1], d = slots[2];
     EXPECT_TRUE(success);
     EXPECT_EQ(h, 20);
@@ -157,7 +157,7 @@ TEST(UfoTest, CalculateIngotPositionTest) {
     ufo.H = 20;
     ufo.W = 20;
     ufo.ingots.emplace_back(Ingot(30, 15, 20, 0));
-    success = ufo.calculateIngotPosition(&ufo.ingots.front(), &slots[0], &commands);
+    success = ufo.calculateIngotDimensions(&ufo.ingots.front(), &slots[0], &commands);
     h = slots[0], w = slots[1], d = slots[2];
     EXPECT_TRUE(success);
     EXPECT_EQ(h, 20);
@@ -171,7 +171,7 @@ TEST(UfoTest, CalculateIngotPositionTest) {
     ufo.H = 20;
     ufo.W = 20;
     ufo.ingots.emplace_back(Ingot(15, 30, 20, 0));
-    success = ufo.calculateIngotPosition(&ufo.ingots.front(), &slots[0], &commands);
+    success = ufo.calculateIngotDimensions(&ufo.ingots.front(), &slots[0], &commands);
     h = slots[0], w = slots[1], d = slots[2];
     EXPECT_TRUE(success);
     EXPECT_EQ(h, 15);
@@ -207,13 +207,28 @@ TEST(UfoTest, CalculateEnergyCostTest) {
 
 TEST(UfoTest, CalculateDepthTest) {
     UFO ufo = UFO();
+    double depth;
+
+    // Calculate depth by energy limit  (values taken from CalculateEnergyCostTest)
     ufo.ingots.emplace_back(Ingot(20, 20, 1, 19.32));
-    double depth = ufo.calculateDepth(
-        &ufo.ingots.front(),
-        1.55215195296000008085002264124341309070587158203125
+    depth = ufo.calculateDepth(
+            &ufo.ingots.front(),
+            1.55215195296000008085002264124341309070587158203125,
+            1000000
     );
-    ASSERT_LE(depth, 1.00001);
-    ASSERT_GE(depth, 0.99999);
+    EXPECT_LE(depth, 1.00001);
+    EXPECT_GE(depth, 0.99999);
+    ufo.ingots.clear();
+
+    // Calculate depth by capacity
+    ufo.ingots.emplace_back(Ingot(1000, 1000,  1000, 19.32));
+    depth = ufo.calculateDepth(
+            &ufo.ingots.front(),
+            1000000,
+            50
+    );
+    EXPECT_EQ(depth, 0.5);
+    ufo.ingots.clear();
 }
 
 
