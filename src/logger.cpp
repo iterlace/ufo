@@ -26,7 +26,7 @@ void Logger::log(const std::string& message) {
     if (message.length() == 0)
         return;
 
-    cerr << message + '\n';
+    cerr << message << endl;
 
 //    if (this->logFile->good())
 //        *this->logFile << message + '\n';

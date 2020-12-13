@@ -37,7 +37,7 @@ double Ingot::getWeight() {
 
 void UFO::putIngot(Ingot ingot) {
     CR.log("P");
-    SR.log("Got new ingot: %s\n", ingot.to_string().c_str());
+    SR.log("Got new ingot: %s", ingot.to_string().c_str());
     ingots.emplace_back(ingot);
     if (isIngotValid(&ingots.front())) {
         if (E-calculateEnergyCosts(&ingots.front())-ACCEPT_COST >= _EF)
@@ -179,7 +179,7 @@ void UFO::cutIngot(double newDepth) {
     Ingot *i = &ingots.front();
     E -= 5;
     ingots.emplace(ingots.begin()+1, Ingot(i->height, i->width, i->depth-newDepth, i->density));
-    SR.log("Ingot %s cut to %.2f cm\n", ingots.front().to_string().c_str(), newDepth);
+    SR.log("Ingot %s cut to %.2f cm", ingots.front().to_string().c_str(), newDepth);
     i->depth = newDepth;
 }
 
@@ -198,13 +198,14 @@ void UFO::acceptIngot() {
     E -= calculateEnergyCosts(i);
     E -= 2;
     E += F_EFFICIENCY*(F_L*i->getWeight()+(F_C*i->getWeight()*(F_TM-F_TR)));
-    SR.log("Ingot %s accepted. Energy left: %.0f\n", ingots.front().to_string().c_str(), E);
+    SR.log("Ingot %s accepted. Energy left: %.0f", ingots.front().to_string().c_str(), E);
     ingots.pop_front();
 
 }
 
 
 void UFO::flyAway() {
+    isActive = false;
     SR.log("Yankee go home!\n");
 }
 
