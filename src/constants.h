@@ -25,7 +25,7 @@ const double
     F_TM = 1337.58,      // heating temperature
     F_C = 0.129,         // specific heat of gold
     F_L = 67,            // specific heat of fusion of gold
-    F_EFFICIENCY = 0.7;  // efficiency of the recuperator
+    F_EFFICIENCY = 0.4;  // efficiency of the recuperator
 
 
 #endif //UFO_CONSTANTS_H

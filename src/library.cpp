@@ -37,7 +37,7 @@ double Ingot::getWeight() {
 
 void UFO::putIngot(Ingot ingot) {
     CR.log("P");
-    SR.log("Got new ingot: %s", ingot.to_string().c_str());
+    SR.log("Got new ingot: %s. Energy left: %.0f", ingot.to_string().c_str(), E);
     ingots.emplace_back(ingot);
     if (isIngotValid(&ingots.front())) {
         if (E-calculateEnergyCosts(&ingots.front())-ACCEPT_COST >= _EF)
@@ -61,21 +61,21 @@ void UFO::putIngot(Ingot ingot) {
 void UFO::rotateIngot() {
     CR.log("R");
     E -= ROTATE_COST;
-    SR.log("Ingot %s was rotated", ingots.front().to_string().c_str());
+    SR.log("Ingot %s was rotated. Energy left: %.0f", ingots.front().to_string().c_str(), E);
     swap(ingots.front().width, ingots.front().height);
 }
 
 void UFO::turnIngot() {
     CR.log("T");
     E -= TURN_COST;
-    SR.log("Ingot %s was turned", ingots.front().to_string().c_str());
+    SR.log("Ingot %s was turned. Energy left: %.0f", ingots.front().to_string().c_str(), E);
     swap(ingots.front().width, ingots.front().depth);
 }
 
 void UFO::spinIngot() {
     CR.log("S");
     E -= SPIN_COST;
-    SR.log("Ingot %s was spinned", ingots.front().to_string().c_str());
+    SR.log("Ingot %s was spinned. Energy left: %.0f", ingots.front().to_string().c_str(), E);
     swap(ingots.front().height, ingots.front().depth);
 }
 
@@ -137,7 +137,6 @@ bool UFO::isIngotValid(Ingot *i) {
 
     success = calculateIngotPosition(i, &slots[0], &commands);
     if (!success) {
-        dropIngot();
         return false;
     }
 
@@ -159,7 +158,7 @@ bool UFO::isIngotValid(Ingot *i) {
 }
 
 double UFO::calculateEnergyCosts(Ingot *i) {
-    return -(i->getWeight()*(F_C*(F_T0-F_TM)-F_L));
+    return i->getWeight()*(F_L+(F_C*(F_TM-F_T0)));
 }
 
 double UFO::calculateDepth(Ingot *i, double energyLimit) {
@@ -167,7 +166,7 @@ double UFO::calculateDepth(Ingot *i, double energyLimit) {
     double w = i->width/100;
     double density = i->density;
 
-    double d = -(100*energyLimit)/((h*w*density)*(F_C*(F_T0-F_TM)-F_L));
+    double d = 100*energyLimit/((h*w*density)*(F_L+(F_C*(F_TM-F_T0))));
     if (d > i->depth)
         d = i->depth;
     return d;
@@ -179,7 +178,7 @@ void UFO::cutIngot(double newDepth) {
     Ingot *i = &ingots.front();
     E -= 5;
     ingots.emplace(ingots.begin()+1, Ingot(i->height, i->width, i->depth-newDepth, i->density));
-    SR.log("Ingot %s cut to %.2f cm", ingots.front().to_string().c_str(), newDepth);
+    SR.log("Ingot %s cut to %.2f cm. Energy left: %.0f", ingots.front().to_string().c_str(), newDepth, E);
     i->depth = newDepth;
 }
 
@@ -187,7 +186,7 @@ void UFO::cutIngot(double newDepth) {
 void UFO::dropIngot() {
     CR.log("D");
     E -= DROP_COST;
-    SR.log("Ingot %s dropped", ingots.front().to_string().c_str());
+    SR.log("Ingot %s dropped. Energy left: %.0f", ingots.front().to_string().c_str(), E);
     ingots.pop_front();
 }
 
@@ -200,7 +199,6 @@ void UFO::acceptIngot() {
     E += F_EFFICIENCY*(F_L*i->getWeight()+(F_C*i->getWeight()*(F_TM-F_TR)));
     SR.log("Ingot %s accepted. Energy left: %.0f", ingots.front().to_string().c_str(), E);
     ingots.pop_front();
-
 }
 
 
