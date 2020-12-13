@@ -12,9 +12,17 @@ enum COST {
 };
 
 enum COMMAND {
-    SPIN,
-    TURN,
-    ROTATE,
+    // Ingot modifications
+    SPIN = 'S',
+    TURN = 'T',
+    ROTATE = 'R',
+
+    // General commands
+    PUT = 'P',
+    CUT = 'C',
+    ACCEPT = 'A',
+    DROP = 'D',
+    FLY_AWAY = 'F'
 };
 
 

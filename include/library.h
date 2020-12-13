@@ -47,6 +47,11 @@ public:
      * @returns weight of the ingot (kg)
      */
     double getWeight();
+
+    /**
+     * @returns volume of the ingot (m3)
+     */
+    double getVolume();
 };
 
 
@@ -78,6 +83,16 @@ public:
 
     // Status Register
     Logger SR = Logger();
+
+    /**
+     * @return  energy left in the UFO, excluding _EF
+     */
+    double availableEnergy();
+
+    /**
+     * @return  space left in the Bulba(c)
+     */
+    double leftVolume();
 
     /**
      * Puts the ingot on the conveyor and processes it.

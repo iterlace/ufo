@@ -11,6 +11,8 @@
 using namespace std;
 
 
+// Ingot
+
 Ingot::Ingot() {
     this->height = randomNumber(10, 100);
     this->width = randomNumber(10, 100);
@@ -34,20 +36,39 @@ double Ingot::getWeight() {
 }
 
 
+double Ingot::getVolume() {
+    return height/100 * width/100 * depth/100;
+}
+
+
+
+// UFO
+
+double UFO::leftVolume() {
+    return totalVolume - usedVolume;
+}
+
+
+double UFO::availableEnergy() {
+    return E - _EF;
+}
+
 
 void UFO::putIngot(Ingot ingot) {
     CR.log("P");
     SR.log("Got new ingot: %s. Energy left: %.0f", ingot.to_string().c_str(), E);
     ingots.emplace_back(ingot);
-    if (placeIngotCorrectly(&ingots.front())) {
-        if (E-calculateEnergyCosts(&ingots.front())-ACCEPT_COST >= _EF)
+    Ingot *i = &ingots.front();
+    bool isIngotVaild = placeIngotCorrectly(i);
+    if (isIngotVaild) {
+        if ((calculateEnergyCosts(i)+ACCEPT_COST+DROP_COST <= availableEnergy()) && (i->getVolume() <= leftVolume()))
             acceptIngot();
         else {
             double newDepth;
-            // Energy, which will be used in the future
-            const double energyToRemain = _EF + CUT_COST + ACCEPT_COST + DROP_COST;
-            while((newDepth = calculateDepth(&ingots.front(), E-energyToRemain, totalVolume-usedVolume)
-                    ) > 0.001 && totalVolume-usedVolume > 0) {
+            // Energy, which will be used additionally in the future
+            const double energyExpenses = CUT_COST + ACCEPT_COST + DROP_COST;
+            while((newDepth = calculateDepth(&ingots.front(), availableEnergy()-energyExpenses, leftVolume())
+                    ) > 0.001 && leftVolume() > 0) {
                 cutIngot(newDepth);
                 acceptIngot();
             }
@@ -163,6 +184,11 @@ double UFO::calculateEnergyCosts(Ingot *i) {
 }
 
 double UFO::calculateDepth(Ingot *i, double energyLimit, double capacity) {
+    if (energyLimit <= 0)
+        return 0;
+    if (capacity <= 0)
+        return 0;
+
     double h = i->height/100;
     double w = i->width/100;
     double density = i->density;
