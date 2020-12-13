@@ -28,21 +28,21 @@ enum COMMAND {
 
 // Formulas constants
 
-// Initial temperature of golden ingot
+// Initial temperature of golden ingot (K)
 const double F_T0 = 300;
-// Cooling by recuperator temperature
+// Cooling by recuperator temperature (K)
 const double F_TR = 4;
-// Heating temperature
+// Heating temperature (K)
 const double F_TM = 1337.58;
-// Specific heat of gold
-const double F_C = 0.129;
-// Specific heat of fusion of gold
-const double F_L = 67;
+// Specific heat of gold (kJ/kg)
+const double F_C = 0.130;
+// Specific heat of fusion of gold (kJ/kg)
+const double F_L = 64;
 // Efficiency of the recuperator
 const double F_EFFICIENCY = 0.4;
 // Density of gold
 const double F_DENSITY = 19320;
-            
+
 
 
 #endif //UFO_CONSTANTS_H

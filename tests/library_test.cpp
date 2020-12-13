@@ -201,7 +201,8 @@ TEST(UfoTest, CalculateEnergyCostTest) {
     UFO ufo = UFO();
     ufo.ingots.emplace_back(Ingot(0.2, 0.2, 0.01, 19320));
     double costs = ufo.calculateEnergyCosts(&ufo.ingots.front());
-    ASSERT_EQ(costs, 1552.151952960000244274851866066455841064453125);
+    printf("costs: %.100f\n", costs);
+    ASSERT_EQ(costs, 1536.986371200000348835601471364498138427734375);
 }
 
 
@@ -213,7 +214,7 @@ TEST(UfoTest, CalculateDepthTest) {
     ufo.ingots.emplace_back(Ingot(0.2, 0.2, 0.01, 19320));
     depth = ufo.calculateDepth(
             &ufo.ingots.front(),
-            1552.151952960000244274851866066455841064453125,
+            1536.986371200000348835601471364498138427734375,
             1000000
     );
     EXPECT_LE(depth, 0.0100001);
