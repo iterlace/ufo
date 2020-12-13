@@ -201,7 +201,6 @@ TEST(UfoTest, CalculateEnergyCostTest) {
     UFO ufo = UFO();
     ufo.ingots.emplace_back(Ingot(0.2, 0.2, 0.01, 19320));
     double costs = ufo.calculateEnergyCosts(&ufo.ingots.front());
-    printf("costs: %.100f\n", costs);
     ASSERT_EQ(costs, 1536.986371200000348835601471364498138427734375);
 }
 
