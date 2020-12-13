@@ -31,17 +31,17 @@ TEST(IngotTest, AutoConstructorTest) {
 }
 
 
-//TEST(UfoTest, PutIngotTest) {
-//    Ingot ingot = Ingot(10, 10, 10, 19.32);
-//    UFO ufo = UFO();
-//    ufo.H = 10;
-//    ufo.W = 10;
-//    ufo.putIngot(ingot);
-//    EXPECT_EQ(ufo.ingots.front().height, ingot.height);
-//    EXPECT_EQ(ufo.ingots.front().width, ingot.width);
-//    EXPECT_EQ(ufo.ingots.front().depth, ingot.depth);
-//    EXPECT_EQ(ufo.ingots.front().density, ingot.density);
-//}
+TEST(UfoTest, PutIngotTest) {
+    std::fprintf(stderr, "======\n");
+    Ingot ingot = Ingot(10, 10, 10000000, 19.32);
+    UFO ufo = UFO();
+    ufo.H = 10;
+    ufo.W = 10;
+    // TODO: mock cutIngot to count iterations
+    ufo.putIngot(ingot);
+    std::fprintf(stderr, "=====\n");
+    EXPECT_GE(ufo.E, 100);
+}
 
 
 TEST(UfoTest, RotateIngotTest) {

@@ -45,7 +45,7 @@ void UFO::putIngot(Ingot ingot) {
         else {
             double newDepth;
             // Energy, which will be used in the future
-            const double energyToRemain = _EF - CUT_COST - ACCEPT_COST - DROP_COST;
+            const double energyToRemain = _EF + CUT_COST + ACCEPT_COST + DROP_COST;
             while((newDepth = calculateDepth(&ingots.front(), E-energyToRemain)) > 0.001) {
                 cutIngot(newDepth);
                 acceptIngot();
@@ -179,9 +179,8 @@ void UFO::cutIngot(double newDepth) {
     Ingot *i = &ingots.front();
     E -= 5;
     ingots.emplace(ingots.begin()+1, Ingot(i->height, i->width, i->depth-newDepth, i->density));
+    SR.log("Ingot %s cut to %.2f cm\n", ingots.front().to_string().c_str(), newDepth);
     i->depth = newDepth;
-
-    SR.log("Ingot %s cut to %.2f cm\n", ingots.front().to_string().c_str(), i->depth);
 }
 
 
