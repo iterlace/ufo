@@ -226,9 +226,6 @@ void UFO::acceptIngot() {
     Ingot *i = &ingots.front();
     E -= calculateEnergyCosts(i);
     E -= ACCEPT_COST;
-
-//    SR.log("Energy lost: %.0f", calculateEnergyCosts(i));
-//    SR.log("Energy returned: %.0f", F_EFFICIENCY*(F_L*i->getWeight()+(F_C*i->getWeight()*(F_TM-F_TR))));
     E += F_EFFICIENCY*(F_L*i->getWeight()+(F_C*i->getWeight()*(F_TM-F_TR)));
     SR.log("Ingot %s accepted. Energy left: %.0f", ingots.front().to_string().c_str(), E);
     ingots.pop_front();
