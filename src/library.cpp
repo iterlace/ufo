@@ -16,7 +16,7 @@ using namespace std;
 Ingot::Ingot() {
     this->height = randomNumber(0.10, 1);
     this->width = randomNumber(0.10, 1);
-    this->depth = randomNumber(0.10, 5);
+    this->depth = randomNumber(0.05, 2);
     this->density = randomNumber(19300, 19320);
 }
 
@@ -208,7 +208,7 @@ void UFO::cutIngot(double newDepth) {
     Ingot *i = &ingots.front();
     E -= CUT_COST;
     ingots.emplace(ingots.begin()+1, Ingot(i->height, i->width, i->depth-newDepth, i->density));
-    SR.log("Ingot %s cut to %.2f cm. Energy left: %.0f", ingots.front().to_string().c_str(), newDepth, E);
+    SR.log("Ingot %s cut to %.2f m. Energy left: %.0f", ingots.front().to_string().c_str(), newDepth, E);
     i->depth = newDepth;
 }
 
