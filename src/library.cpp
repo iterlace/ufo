@@ -206,7 +206,7 @@ double UFO::calculateDepth(Ingot *i, double energyLimit, double capacity) {
 void UFO::cutIngot(double newDepth) {
     CR.log("C");
     Ingot *i = &ingots.front();
-    E -= 5;
+    E -= CUT_COST;
     ingots.emplace(ingots.begin()+1, Ingot(i->height, i->width, i->depth-newDepth, i->density));
     SR.log("Ingot %s cut to %.2f cm. Energy left: %.0f", ingots.front().to_string().c_str(), newDepth, E);
     i->depth = newDepth;
@@ -225,7 +225,7 @@ void UFO::acceptIngot() {
     CR.log("A");
     Ingot *i = &ingots.front();
     E -= calculateEnergyCosts(i);
-    E -= 2;
+    E -= ACCEPT_COST;
     E += F_EFFICIENCY*(F_L*i->getWeight()+(F_C*i->getWeight()*(F_TM-F_TR)));
     SR.log("Ingot %s accepted. Energy left: %.0f", ingots.front().to_string().c_str(), E);
     ingots.pop_front();

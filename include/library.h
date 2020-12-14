@@ -36,7 +36,7 @@
 
 class Ingot {
 public:
-    // height, width, depth - linear dimensions of ingot (cm)
+    // height, width, depth - linear dimensions of ingot (m)
     double height, width, depth, density;
 
     Ingot();
