@@ -39,7 +39,7 @@ const double F_C = 0.130;
 // Specific heat of fusion of gold (kJ/kg)
 const double F_L = 64;
 // Efficiency of the recuperator
-const double F_EFFICIENCY = 0.4;
+const double F_EFFICIENCY = 0.6;
 // Density of gold
 const double F_DENSITY = 19320;
 
